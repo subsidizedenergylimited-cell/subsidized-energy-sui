@@ -90,4 +90,17 @@ export const api = {
   }>> {
     return this.request('/inverters');
   },
+
+  async getCertificates(): Promise<Array<{
+    id: string;
+    productionDay: number;
+    wattHours: number;
+    walrusBlobId: string;
+    certObjectId: string;
+    txDigest: string;
+    mintedAt: string;
+    inverter: { brand: string; label: string };
+  }>> {
+    return this.request('/certificates');
+  },
 };
