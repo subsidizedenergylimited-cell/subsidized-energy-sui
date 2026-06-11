@@ -1,0 +1,8 @@
+[package]
+name = "subsidized_energy"
+edition = "2024"
+
+[dependencies]
+
+[addresses]
+subsidized_energy = "0x0"
