@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "walrus:demo": "npx ts-node src/storeAndVerify.ts"
+    "walrus:demo": "npx ts-node src/storeAndVerify.ts",
+    "mint:demo": "npx ts-node src/mintFromWalrus.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@mysten/sui": "^2.17.0",
+    "dotenv": "^17.4.2"
+  },
   "devDependencies": {
+    "@types/node": "^20.12.7",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "@types/node": "^20.12.7"
+    "typescript": "^5.4.5"
   }
 }

@@ -1,0 +1,12 @@
+# secrets
+.env
+*.keystore
+sui.keystore
+
+# deps / build
+node_modules/
+dist/
+contracts/build/
+
+# OS
+.DS_Store
