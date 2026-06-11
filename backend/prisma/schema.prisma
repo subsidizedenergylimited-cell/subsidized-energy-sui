@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // SQLite for local dev — change provider to "postgresql" and update
+  // DATABASE_URL for production.
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  email              String?  @unique
+  passwordHash       String?
+  suiAddress         String   @unique
+  encryptedPrivateKey String?  // null for wallet-auth (non-custodial) users
+  custodial          Boolean  @default(false)
+  srePoints          Int      @default(0)
+  createdAt          DateTime @default(now())
+}
+
+model WalletNonce {
+  id        String   @id @default(cuid())
+  address   String   @unique
+  nonce     String
+  expiresAt DateTime
+}

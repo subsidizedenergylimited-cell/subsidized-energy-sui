@@ -10,3 +10,5 @@ contracts/build/
 
 # OS
 .DS_Store
+prisma/dev.db
+prisma/*.db
