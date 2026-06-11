@@ -29,6 +29,9 @@ export default function LandingPage() {
           <span className="font-bold text-teal-300 tracking-tight">Subsidized Energy</span>
         </div>
         <div className="flex items-center gap-3">
+          <Link href="/verify" className="text-sm text-teal-500 hover:text-teal-300 transition-colors hidden sm:block">
+            Verify
+          </Link>
           {!loading && user ? (
             <>
               <span className="text-sm text-teal-500 hidden sm:block">{user.suiAddress.slice(0, 10)}…</span>

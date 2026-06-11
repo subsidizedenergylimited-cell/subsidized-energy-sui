@@ -1,6 +1,10 @@
 'use client';
 
-const SUISCAN = 'https://suiscan.xyz/testnet/object';
+import { useState } from 'react';
+import { verifyCertificate, type VerifyOutcome } from '@/lib/verify';
+import { VerifyResult } from '@/components/VerifyResult';
+
+const SUISCAN   = 'https://suiscan.xyz/testnet/object';
 const WALRUS_AGG = 'https://aggregator.walrus-testnet.walrus.space/v1/blobs';
 
 interface CertificateCardProps {
@@ -25,17 +29,29 @@ function shorten(s: string, head = 10, tail = 4): string {
 }
 
 export function CertificateCard({
-  productionDay, wattHours, mintedAt, certObjectId, walrusBlobId,
-  inverterLabel,
+  productionDay, wattHours, mintedAt, certObjectId, walrusBlobId, inverterLabel,
 }: CertificateCardProps) {
-  const kwh = (wattHours / 1000).toFixed(2);
+  const [verifying, setVerifying]     = useState(false);
+  const [outcome, setOutcome]         = useState<VerifyOutcome | null>(null);
+
+  const kwh        = (wattHours / 1000).toFixed(2);
   const mintedDate = new Date(mintedAt).toLocaleString('en', {
     month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC',
   });
 
+  async function handleVerify() {
+    setVerifying(true);
+    setOutcome(null);
+    try {
+      setOutcome(await verifyCertificate(certObjectId));
+    } finally {
+      setVerifying(false);
+    }
+  }
+
   return (
     <div className="rounded-2xl border border-teal-900/40 bg-teal-950/20 p-5 flex flex-col gap-4">
-      {/* Header row */}
+      {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs text-teal-500 uppercase tracking-wider">{formatDay(productionDay)}</p>
@@ -82,14 +98,21 @@ export function CertificateCard({
         </a>
       </div>
 
-      {/* Verify button — wired in Slice 4 */}
+      {/* Verify button */}
       <button
-        disabled
-        title="On-chain verification — coming in Slice 4"
-        className="w-full py-2 rounded-lg border border-teal-900/40 text-teal-700 text-xs font-medium cursor-not-allowed select-none"
+        onClick={outcome ? () => setOutcome(null) : handleVerify}
+        disabled={verifying}
+        className={`w-full py-2 rounded-lg text-xs font-medium transition-all ${
+          outcome
+            ? 'border border-teal-800/40 text-teal-500 hover:text-teal-300 hover:border-teal-700'
+            : 'border border-teal-700/50 text-teal-300 hover:border-teal-500 hover:text-teal-100 hover:bg-teal-900/20'
+        } disabled:opacity-50 disabled:cursor-not-allowed`}
       >
-        Verify proof (Slice 4)
+        {verifying ? 'Verifying…' : outcome ? 'Clear result' : '🔍 Verify proof'}
       </button>
+
+      {/* Inline result */}
+      {outcome && <VerifyResult outcome={outcome} />}
     </div>
   );
 }
