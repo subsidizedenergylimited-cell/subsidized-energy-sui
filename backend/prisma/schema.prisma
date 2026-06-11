@@ -17,7 +17,20 @@ model User {
   encryptedPrivateKey String?  // null for wallet-auth (non-custodial) users
   custodial          Boolean  @default(false)
   srePoints          Int      @default(0)
+  hasInverterBonus   Boolean  @default(false) // guards the one-time 3-SRE connection bonus
   createdAt          DateTime @default(now())
+  inverters          Inverter[]
+}
+
+model Inverter {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  brand               String   // "solaredge" | "growatt" | "deye" | "huawei" | "mock"
+  label               String
+  encryptedCredentials String  // JSON blob, AES-256-GCM encrypted
+  status              String   @default("active") // "active" | "error"
+  createdAt           DateTime @default(now())
 }
 
 model WalletNonce {
