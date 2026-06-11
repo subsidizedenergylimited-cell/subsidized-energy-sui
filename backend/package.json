@@ -1,0 +1,14 @@
+{
+  "name": "subsidized-energy-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "walrus:demo": "npx ts-node src/storeAndVerify.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "@types/node": "^20.12.7"
+  }
+}

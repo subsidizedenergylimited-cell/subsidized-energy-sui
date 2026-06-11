@@ -12,7 +12,7 @@
 
 ## Explorer
 
-[View package on Sui Testnet Explorer](https://suiexplorer.com/object/0x62163791a217539103b137252c5d454a0af72a43d5c49561125907ddb8ed04f7?network=testnet)
+[View package on Sui Testnet Explorer](https://testnet.suivision.xyz/object/0x62163791a217539103b137252c5d454a0af72a43d5c49561125907ddb8ed04f7)
 
 ## Notes
 
