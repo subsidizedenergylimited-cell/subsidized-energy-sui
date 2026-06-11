@@ -74,4 +74,20 @@ export const api = {
   async me(): Promise<{ id: string; email: string | null; suiAddress: string; srePoints: number; custodial: boolean }> {
     return this.request('/me');
   },
+
+  async connectInverter(brand: string, credentials: Record<string, string>): Promise<{
+    id: string; brand: string; label: string; status: string;
+    bonusAwarded: boolean; srePointsAwarded: number;
+  }> {
+    return this.request('/inverters/connect', {
+      method: 'POST',
+      body: JSON.stringify({ brand, credentials }),
+    });
+  },
+
+  async getInverters(): Promise<Array<{
+    id: string; brand: string; label: string; status: string; createdAt: string;
+  }>> {
+    return this.request('/inverters');
+  },
 };

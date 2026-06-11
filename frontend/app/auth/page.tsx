@@ -35,11 +35,13 @@ export default function AuthPage() {
     try {
       if (mode === 'register') {
         await api.register(email, password);
+        await refresh();
+        router.push('/inverters');
       } else {
         await api.login(email, password);
+        await refresh();
+        router.push('/dashboard');
       }
-      await refresh();
-      router.push('/dashboard');
     } catch (err) {
       setEmailError(err instanceof Error ? err.message : 'Auth failed');
     } finally {
@@ -58,8 +60,10 @@ export default function AuthPage() {
       const { message } = await api.walletNonce(currentAccount.address);
       const { signature } = await signPersonalMessage({ message: new TextEncoder().encode(message) });
       await api.walletVerify(currentAccount.address, message, signature);
+      const me = await api.me();
       await refresh();
-      router.push('/dashboard');
+      // New wallet users (no SRE bonus yet) go straight to inverter connect
+      router.push(me.srePoints === 0 ? '/inverters' : '/dashboard');
     } catch (err) {
       setWalletError(err instanceof Error ? err.message : 'Wallet auth failed');
     } finally {
