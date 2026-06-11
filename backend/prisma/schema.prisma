@@ -20,6 +20,7 @@ model User {
   hasInverterBonus   Boolean  @default(false) // guards the one-time 3-SRE connection bonus
   createdAt          DateTime @default(now())
   inverters          Inverter[]
+  certificates       Certificate[]
 }
 
 model Inverter {
@@ -31,6 +32,23 @@ model Inverter {
   encryptedCredentials String  // JSON blob, AES-256-GCM encrypted
   status              String   @default("active") // "active" | "error"
   createdAt           DateTime @default(now())
+  certificates        Certificate[]
+}
+
+model Certificate {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  inverterId    String
+  inverter      Inverter @relation(fields: [inverterId], references: [id])
+  productionDay Int      // YYYYMMDD
+  wattHours     Int
+  walrusBlobId  String
+  certObjectId  String   // Sui object ID of the minted SubCertificate
+  txDigest      String
+  mintedAt      DateTime @default(now())
+
+  @@unique([userId, productionDay]) // DB-level idempotency guard
 }
 
 model WalletNonce {
